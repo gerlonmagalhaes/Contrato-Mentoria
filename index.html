@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contrato Mentoria - My Personal Teacher</title>
+    <title>Contrato Digital - Mentoria Minha Primeira Vaga Internacional</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -28,14 +28,14 @@
     <div class="container bg-white w-full max-w-3xl mx-auto p-8 md:p-12 rounded-2xl shadow-lg">
         <div class="header text-center mb-8">
             <img src="https://placehold.co/200x80/3498db/white?text=My+Personal+Teacher" alt="Logo My Personal Teacher" class="mx-auto mb-4 rounded-lg">
-            <h1 class="text-3xl font-bold text-gray-800">Contrato de Mentoria de Carreira</h1>
-            <p class="text-gray-600 mt-2">Preencha seus dados para formalizar sua mentoria.</p>
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Contrato Digital - Mentoria Minha Primeira Vaga Internacional</h1>
+            <p class="text-gray-600 mt-2">Preencha, assine e baixe seu contrato de matrícula.</p>
         </div>
 
         <form id="contract-form">
             <div class="space-y-6">
                  <div class="form-group">
-                    <label for="fullName" class="block text-sm font-medium text-gray-700 mb-1">Nome completo do(a) Mentorado(a)</label>
+                    <label for="fullName" class="block text-sm font-medium text-gray-700 mb-1">Nome completo do aluno(a)</label>
                     <input type="text" id="fullName" name="Nome do Aluno" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition" required placeholder="Digite seu nome completo">
                 </div>
                 <div class="form-group">
@@ -53,11 +53,11 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="plan" class="block text-sm font-medium text-gray-700 mb-1">Programa Selecionado</label>
+                    <label for="plan" class="block text-sm font-medium text-gray-700 mb-1">Escolha o seu plano</label>
                     <select id="plan" name="Plano Escolhido" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition bg-white" required>
-                        <option value="Mentoria de Carreira (12 meses)" selected>Mentoria de Carreira (12 meses)</option>
-                        <option value="Mentoria de Carreira (Outro)">Mentoria de Carreira (Outro)</option>
+                        <option value="Mentoria Minha Primeira Vaga Internacional - R$ 2.997,00" selected>Mentoria Minha Primeira Vaga Internacional - R$ 2.997,00</option>
                     </select>
+                    <small class="text-gray-500 mt-1 block">Para pagamento parcelado, haverá acréscimo de 4,9%.</small>
                 </div>
             </div>
 
@@ -100,7 +100,7 @@
         </div>
 
         <div class="footer text-center mt-10 text-xs text-gray-500">
-            <p>My Personal Teacher - Mentoria de Carreira</p>
+            <p>My Personal Teacher - Mentoria Minha Primeira Vaga Internacional</p>
             <p>+55 71 92001-2811 | cursomyteacher@gmail.com</p>
         </div>
     </div>
@@ -245,8 +245,8 @@
                     y += textHeight + spaceAfter;
                 };
 
-                // --- MONTAGEM DO PDF ---
-                addText(`CONTRATO DE MENTORIA MY PERSONAL TEACHER ${contractNumberFormatted}/2025`, { size: 14, style: 'bold', align: 'center', spaceAfter: 10 });
+                // --- MONTAGEM DO PDF (TÍTULOS ATUALIZADOS) ---
+                addText(`CONTRATO DE MENTORIA MINHA PRIMEIRA VAGA INTERNACIONAL ${contractNumberFormatted}/2025`, { size: 12, style: 'bold', align: 'center', spaceAfter: 10 });
                 addText('CONTRATADA: MY PERSONAL TEACHER, pessoa jurídica de direito privado, inscrita no CNPJ/MF sob o n° 31.890.545/0001-44, com sede na Rua Boquira, 250, Jardim das Margaridas, Salvador/BA.', { style: 'bold', spaceAfter: 10 });
                 
                 addText(`CONTRATANTE: ${fullName}`, { style: 'bold' });
@@ -255,7 +255,7 @@
                 addText(`ENDEREÇO: ${address}`, { style: 'bold' });
                 addText(`PLANO: ${plan}`, { style: 'bold', spaceAfter: 10 });
                 
-                // --- CLÁUSULAS ATUALIZADAS CONFORME PDF DE MENTORIA ---
+                // --- CLÁUSULAS (Mantidas conforme o documento de Mentoria) ---
                 const contractClauses = [
                     { title: 'CLÁUSULA 1 - OBJETO', text: '1.1. O presente contrato tem como objeto a prestação de serviços de mentoria online, voltada à preparação do CONTRATANTE para entrevistas de emprego em inglês para vagas internacionais.\n1.2. A mentoria inclui encontros síncronos, aulas gravadas, acompanhamento com plano de estudo personalizado e estratégias de aplicação para vagas internacionais.' },
                     { title: 'CLÁUSULA 2 - DURAÇÃO DO PROGRAMA', text: '2.1. O programa de mentoria tem duração de 12 (doze) meses. A vigência inicia-se na data de assinatura deste contrato e encerra-se automaticamente após o decurso do prazo estipulado.' },
@@ -287,7 +287,6 @@
                 addText(fullName, { size: 10 });
                 addText('(CONTRATANTE)', { size: 8 });
                 
-                // Assinatura Fixa da Contratada (Gerlon)
                 y += 15;
                  if (y + 20 > pageHeight - margin) {
                     pdf.addPage();
