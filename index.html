@@ -115,7 +115,7 @@
             
             { title: 'CLÁUSULA 3 - RESPONSABILIDADES DO/A CONTRATANTE', text: '3.1. O sucesso do programa depende diretamente do comprometimento do/a CONTRATANTE. Para alcançar os objetivos, este deverá:\na) Participar dos encontros ao vivo agendados.\nb) Assistir às aulas gravadas disponibilizadas.\nc) Seguir o plano de estudos personalizado elaborado pelo programa.\nd) Aplicar e gravar as entrevistas para serem analisadas.\n3.2. A ausência de comprometimento nas ações acima citadas pode comprometer os resultados esperados, não sendo responsabilidade da CONTRATADA.' },
             
-            { title: 'CLÁUSULA 4 - RESPONSABILIDADES DA CONTRATADA', text: '4.1. A CONTRATADA se compromete a fornecer os seguintes serviços durante a vigência de 12 meses:\na) Acesso a 10 (dez) módulos com mais de 50 (cinquenta) aulas preparatórias em formato de vídeo.\nb) Realização de 24 (vinte e quatro) encontros individuais de 30 (trinta) minutos cada, OU, a critério do CONTRATANTE e em comum acordo, 12 (doze) encontros individuais de 1 (uma) hora cada.\nc) Acompanhamento mensal de desempenho.\n4.2. Conteúdo e Materiais inclusos:\na) Acesso ao aplicativo Duolingo.\nb) 1 e-book com perguntas e respostas comuns em entrevistas.\nc) 1 deck com palavras essenciais do inglês.\nd) 1 cronograma de estudos anual.\n4.3. Suporte e Networking: Simulação de entrevistas, análise de desempenho e acesso a grupos de networking.' },
+            { title: 'CLÁUSULA 4 - RESPONSABILIDADES DA CONTRATADA', text: '4.1. A CONTRATADA se compromete a fornecer os seguintes serviços durante a vigência de 12 meses:\na) Acesso a 10 (dez) módulos com mais de 50 (cinquenta) aulas preparatórias em formato de vídeo.\nb) Realização de 24 (vinte e quatro) encontros individuais de 30 (trinta) minutos cada, OU, a critério do CONTRATANTE e em comum acordo, 12 (doze) encontros individuais de 1 (uma) hora cada.\nc) Acompanhamento mensal de desempenho.\n4.2. Conteúdo e Materiais inclusos:\na) 1 e-book com perguntas e respostas comuns em entrevistas.\nc) 1 deck com palavras essenciais do inglês.\nd) 1 cronograma de estudos anual.\n4.3. Suporte e Networking: Simulação de entrevistas, análise de desempenho e acesso a grupos de networking.' },
             
             { title: 'CLÁUSULA 5 - POLÍTICA DE PAGAMENTO E REEMBOLSO', text: '5.1. O pagamento deve ser realizado no ato da contratação.\n5.2. O/A CONTRATANTE tem o direito de solicitar o cancelamento e o reembolso integral do valor pago em até 7 (sete) dias corridos após a confirmação do pagamento, conforme Código de Defesa do Consumidor.\n5.3. Após o período de 7 dias, o valor pago não será reembolsado. A falta de acesso às aulas ou desistência após este prazo não gera direito a reembolso, visto que o serviço estará disponível.' },
             
@@ -126,7 +126,7 @@
             // CLÁUSULA 8 ATUALIZADA COM O PONTO DE VALIDADE
             { 
                 title: 'CLÁUSULA 8 - DISPOSIÇÕES FINAIS', 
-                text: '8.1. Ao assinar este contrato, o/a CONTRATANTE declara que leu e concorda com os termos apresentados.\n8.2. A vigência deste Contrato e o início da prestação dos serviços dar-se-ão com a confirmação do pagamento integral e a disponibilização do acesso ao ambiente da mentoria. A contagem do prazo de 12 (doze) meses terá como marco inicial a data de início formalmente registrada pela CONTRATADA no cronograma de estudos compartilhado com o CONTRATANTE.\n8.3. Este contrato entra em vigor a partir da data de sua assinatura.' 
+                text: '8.1. Ao assinar este contrato, o/a CONTRATANTE declara que leu e concorda com os termos apresentados.\n8.2. A vigência deste Contrato e o início da prestação dos serviços dar-se-ão com a confirmação do pagamento integral e a disponibilização do acesso ao ambiente da mentoria. A contagem do prazo de 12 (doze) meses terá como marco inicial a data de início formalmente registrada pela CONTRATADA no cronograma de estudos compartilhado com o CONTRATANTE.' 
             }
         ];
 
@@ -325,12 +325,7 @@
                     pdf.addPage();
                     y = margin;
                 }
-                addText('_________________________', { size: 10, spaceAfter: 2, align: 'left' });
-                addText('GERLON DE JESUS MAGALHAES SANTOS', { size: 10, align: 'left' });
-                addText('(MY PERSONAL TEACHER - CONTRATADA)', { size: 8, align: 'left' });
-
-                pdf.save(`Contrato-Mentoria-${fullName}.pdf`);
-                incrementContractNumber();
+            
 
                 statusMessage.innerHTML = `
                     <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-lg" role="alert">
