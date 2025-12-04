@@ -21,6 +21,8 @@
             -moz-user-select: none; -webkit-user-select: none; -ms-user-select: none; user-select: none;
         }
         #signature-pad { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+        /* Estilo para garantir quebras de linha corretas no modal */
+        #contract-content-modal p { white-space: pre-wrap; }
     </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
@@ -47,15 +49,12 @@
                     <input type="date" id="birthdate" name="Data de Nascimento" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition" required>
                 </div>
                 
-                <div class="form-group">
-                    <label for="address" class="block text-sm font-medium text-gray-700 mb-1">Endereço Completo</label>
-                    <input type="text" id="address" name="Endereço" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition" required placeholder="Rua, Número, Bairro, Cidade - Estado, CEP">
-                </div>
+                <input type="hidden" id="address" name="Endereço" value="Não Aplicável"> 
 
                 <div class="form-group">
-                    <label for="plan" class="block text-sm font-medium text-gray-700 mb-1">Escolha o seu plano</label>
+                    <label for="plan" class="block text-sm font-medium text-gray-700 mb-1">Plano Contratado</label>
                     <select id="plan" name="Plano Escolhido" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition bg-white" required>
-                        <option value="Mentoria Minha Primeira Vaga Internacional - R$ 2.997,00" selected>Mentoria Minha Primeira Vaga Internacional - R$ 2.997,00</option>
+                        <option value="Mentoria Minha Primeira Vaga Internacional - R$ 2.400,00" selected>Mentoria Minha Primeira Vaga Internacional - R$ 2.400,00</option>
                     </select>
                     <small class="text-gray-500 mt-1 block">Para pagamento parcelado, haverá acréscimo de 4,9%.</small>
                 </div>
@@ -108,8 +107,21 @@
     <script>
         const { jsPDF } = window.jspdf;
 
+        // --- DEFINIÇÃO ÚNICA DAS CLÁUSULAS (Para Modal e PDF) ---
+        const contractClauses = [
+            { title: 'CLÁUSULA 1 - OBJETO', text: '1.1. O presente contrato tem como objeto a prestação de serviços de mentoria online, voltada à preparação do CONTRATANTE para entrevistas de emprego em inglês para vagas internacionais.\n1.2. A mentoria inclui encontros síncronos, aulas gravadas, acompanhamento com plano de estudo personalizado e estratégias de aplicação para vagas internacionais.' },
+            { title: 'CLÁUSULA 2 - DURAÇÃO DO PROGRAMA', text: '2.1. O programa de mentoria tem duração de 12 (doze) meses. A vigência inicia-se na data de assinatura deste contrato e encerra-se automaticamente após o decurso do prazo estipulado.' },
+            { title: 'CLÁUSULA 3 - RESPONSABILIDADES DO/A CONTRATANTE', text: '3.1. O sucesso do programa depende diretamente do comprometimento do/a CONTRATANTE. Para alcançar os objetivos, este deverá:\na) Participar dos encontros ao vivo agendados.\nb) Assistir às aulas gravadas disponibilizadas.\nc) Seguir o plano de estudos personalizado elaborado pelo programa.\nd) Aplicar e gravar as entrevistas para serem analisadas.\n3.2. A ausência de comprometimento nas ações acima citadas pode comprometer os resultados esperados, não sendo responsabilidade da CONTRATADA.' },
+            { title: 'CLÁUSULA 4 - RESPONSABILIDADES DA CONTRATADA', text: '4.1. A CONTRATADA se compromete a fornecer os seguintes serviços durante a vigência de 12 meses:\na) Acesso a 10 (dez) módulos com mais de 50 (cinquenta) aulas preparatórias em formato de vídeo.\nb) Realização de 24 (vinte e quatro) encontros individuais de 30 (trinta) minutos cada, OU, a critério do CONTRATANTE e em comum acordo, 12 (doze) encontros individuais de 1 (uma) hora cada.\nc) Acompanhamento mensal de desempenho.\n4.2. Conteúdo e Materiais inclusos:\na) 1 e-book com perguntas e respostas comuns em entrevistas.\nc) 1 deck com palavras essenciais do inglês.\nd) 1 cronograma de estudos anual.\n4.3. Suporte e Networking: Simulação de entrevistas, análise de desempenho e acesso a grupos de networking.' },
+            { title: 'CLÁUSULA 5 - POLÍTICA DE PAGAMENTO E REEMBOLSO', text: '5.1. O pagamento deve ser realizado no ato da contratação.\n5.2. O/A CONTRATANTE tem o direito de solicitar o cancelamento e o reembolso integral do valor pago em até 7 (sete) dias corridos após a confirmação do pagamento, conforme Código de Defesa do Consumidor.\n5.3. Após o período de 7 dias, o valor pago não será reembolsado. A falta de acesso às aulas ou desistência após este prazo não gera direito a reembolso, visto que o serviço estará disponível.' },
+            { title: 'CLÁUSULA 6 - CONFIDENCIALIDADE E USO DE INFORMAÇÕES', text: '6.1. Todas as informações pessoais e profissionais compartilhadas serão tratadas com sigilo.\n6.2. O/A CONTRATANTE concorda que informações não confidenciais (depoimentos, dados gerais de progresso) e entrevistas gravadas com identidade protegida poderão ser utilizadas para fins educativos e de propaganda.\n6.3. Para garantir a privacidade, todas as informações utilizadas no acervo serão anonimizadas.' },
+            { title: 'CLÁUSULA 7 - RESCISÃO DO CONTRATO', text: '7.1. O contrato será encerrado automaticamente ao final dos 12 (doze) meses, cessando o acesso ao conteúdo.\n7.2. A CONTRATADA poderá rescindir o contrato caso o/a CONTRATANTE não siga as condições estabelecidas, incluindo a divulgação indevida de materiais próprios do programa para terceiros.' },
+            { title: 'CLÁUSULA 8 - DISPOSIÇÕES FINAIS', text: '8.1. Ao assinar este contrato, o/a CONTRATANTE declara que leu e concorda com os termos apresentados.\n8.2. A vigência deste Contrato e o início da prestação dos serviços dar-se-ão com a confirmação do pagamento integral e a disponibilização do acesso ao ambiente da mentoria. A contagem do prazo de 12 (doze) meses terá como marco inicial a data de início formalmente registrada pela CONTRATADA no cronograma de estudos compartilhado com o CONTRATANTE.' }
+        ];
+
         function getContractNumber() {
-            let contractNumber = localStorage.getItem('contractMentoriaCounter');
+            // Usa uma chave diferente para a mentoria
+            let contractNumber = localStorage.getItem('contractMentoriaCounter'); 
             if (!contractNumber || isNaN(parseInt(contractNumber))) {
                 contractNumber = 1; 
             }
@@ -128,7 +140,7 @@
         const closeModalFooterButton = document.getElementById('close-modal-footer');
         const contractContentModal = document.getElementById('contract-content-modal');
         const cpfInput = document.getElementById('cpf');
-
+        
         cpfInput.addEventListener('input', (e) => {
             let value = e.target.value.replace(/\D/g, '');
             value = value.replace(/(\d{3})(\d)/, '$1.$2');
@@ -137,12 +149,21 @@
             e.target.value = value.slice(0, 14);
         });
 
+        // --- FUNÇÃO PARA GERAR O CONTEÚDO HTML DO CONTRATO PARA O MODAL ---
+        function getContractHtml() {
+            let htmlContent = '';
+            contractClauses.forEach(clause => {
+                htmlContent += `<h4 class="font-bold text-base mt-4 mb-1">${clause.title}</h4>`;
+                // Usando <p> com white-space: pre-wrap para quebrar linha
+                htmlContent += `<p class="text-sm text-gray-700">${clause.text}</p>`;
+            });
+
+            return htmlContent;
+        }
+        
+        // --- FUNÇÃO CORRIGIDA PARA O MODAL (AGORA MOSTRA O CONTEÚDO COMPLETO) ---
         function getContractTextForModal() {
-            return `
-                <h4>CLÁUSULA 1 - OBJETO</h4>
-                <p>1.1. O presente contrato tem como objeto a prestação de serviços de mentoria online, voltada à preparação do CONTRATANTE para entrevistas de emprego em inglês para vagas internacionais.</p>
-                <p><i>(Texto resumido. O contrato completo com todas as cláusulas será gerado no PDF)</i></p>
-                `;
+            return getContractHtml(); 
         }
         
         viewContractLink.addEventListener('click', (e) => {
@@ -205,7 +226,8 @@
                 const fullName = document.getElementById('fullName').value;
                 const cpf = document.getElementById('cpf').value;
                 const plan = document.getElementById('plan').value;
-                const address = document.getElementById('address').value;
+                // Endereço não é mais necessário, mas o campo hidden pode ser lido se precisar para debug
+                // const address = document.getElementById('address').value; 
                 const birthdateRaw = document.getElementById('birthdate').value;
                 const birthdate = birthdateRaw.split('-').reverse().join('/');
 
@@ -225,54 +247,65 @@
                 const margin = 20;
                 let y = margin;
 
+                // --- FUNÇÃO PARA ADICIONAR TEXTO (JUSTIFICADO PADRÃO) ---
                 const addText = (text, options = {}) => {
-                    const { size = 10, style = 'normal', align = 'left', spaceAfter = 5 } = options;
-                    const x = align === 'center' ? pageWidth / 2 : margin;
-                    const finalAlign = align === 'left' ? null : align;
-
+                    const { size = 10, style = 'normal', align = 'justify', spaceAfter = 5 } = options;
+                    
                     pdf.setFontSize(size);
                     pdf.setFont('helvetica', style);
 
-                    const splitText = pdf.splitTextToSize(text, pageWidth - (margin * 2));
+                    const maxLineWidth = pageWidth - (margin * 2);
                     
-                    const textHeight = splitText.length * (size * 0.35);
+                    // Alinhamento para o jsPDF
+                    const finalAlign = align === 'left' ? null : align;
+                    
+                    // Posição X
+                    let xPos = margin;
+                    if (align === 'center') {
+                        // Calcula a posição central (para o título principal)
+                        xPos = pageWidth / 2;
+                    }
+
+                    // Divide o texto para caber na largura da página
+                    const splitText = pdf.splitTextToSize(text, maxLineWidth);
+                    
+                    // Calcula a altura do texto
+                    const textHeight = splitText.length * (size * 0.35); // Aproximação da altura por linha
+
                     if (y + textHeight > pageHeight - margin) {
                         pdf.addPage();
                         y = margin;
                     }
 
-                    pdf.text(splitText, x, y, { align: finalAlign });
+                    // Adiciona o texto ao PDF
+                    pdf.text(splitText, xPos, y, { align: finalAlign });
                     y += textHeight + spaceAfter;
                 };
 
-                // --- MONTAGEM DO PDF (TÍTULOS ATUALIZADOS) ---
+                // --- MONTAGEM DO PDF ---
+                
+                // 1. TÍTULO PRINCIPAL CENTRALIZADO
                 addText(`CONTRATO DE MENTORIA MINHA PRIMEIRA VAGA INTERNACIONAL ${contractNumberFormatted}/2025`, { size: 12, style: 'bold', align: 'center', spaceAfter: 10 });
-                addText('CONTRATADA: MY PERSONAL TEACHER, pessoa jurídica de direito privado, inscrita no CNPJ/MF sob o n° 31.890.545/0001-44, com sede na Rua Boquira, 250, Jardim das Margaridas, Salvador/BA.', { style: 'bold', spaceAfter: 10 });
                 
-                addText(`CONTRATANTE: ${fullName}`, { style: 'bold' });
-                addText(`CPF: ${cpf}`, { style: 'bold' });
-                addText(`DATA DE NASCIMENTO: ${birthdate}`, { style: 'bold' });
-                addText(`ENDEREÇO: ${address}`, { style: 'bold' });
-                addText(`PLANO: ${plan}`, { style: 'bold', spaceAfter: 10 });
+                // 2. DADOS DA CONTRATADA E CONTRATANTE (Alinhamento esquerdo)
+                addText('CONTRATADA: MY PERSONAL TEACHER, pessoa jurídica de direito privado, inscrita no CNPJ/MF sob o n° 31.890.545/0001-44, com sede na Rua Boquira, 250, Jardim das Margaridas, Salvador/BA.', { style: 'bold', align: 'left', spaceAfter: 10 });
                 
-                // --- CLÁUSULAS (Mantidas conforme o documento de Mentoria) ---
-                const contractClauses = [
-                    { title: 'CLÁUSULA 1 - OBJETO', text: '1.1. O presente contrato tem como objeto a prestação de serviços de mentoria online, voltada à preparação do CONTRATANTE para entrevistas de emprego em inglês para vagas internacionais.\n1.2. A mentoria inclui encontros síncronos, aulas gravadas, acompanhamento com plano de estudo personalizado e estratégias de aplicação para vagas internacionais.' },
-                    { title: 'CLÁUSULA 2 - DURAÇÃO DO PROGRAMA', text: '2.1. O programa de mentoria tem duração de 12 (doze) meses. A vigência inicia-se na data de assinatura deste contrato e encerra-se automaticamente após o decurso do prazo estipulado.' },
-                    { title: 'CLÁUSULA 3 - RESPONSABILIDADES DO/A CONTRATANTE', text: '3.1. O sucesso do programa depende diretamente do comprometimento do/a CONTRATANTE. Para alcançar os objetivos, este deverá:\na) Participar dos encontros ao vivo agendados.\nb) Assistir às aulas gravadas disponibilizadas.\nc) Seguir o plano de estudos personalizado elaborado pelo programa.\nd) Aplicar e gravar as entrevistas para serem analisadas.\n3.2. A ausência de comprometimento nas ações acima citadas pode comprometer os resultados esperados, não sendo responsabilidade da CONTRATADA.' },
-                    { title: 'CLÁUSULA 4 - RESPONSABILIDADES DA CONTRATADA', text: '4.1. A CONTRATADA se compromete a fornecer os seguintes serviços durante a vigência de 12 meses:\na) Acesso a 10 (dez) módulos com mais de 50 (cinquenta) aulas preparatórias em formato de vídeo.\nb) Realização de 24 (vinte e quatro) encontros individuais de 30 (trinta) minutos cada, OU, a critério do CONTRATANTE e em comum acordo, 12 (doze) encontros individuais de 1 (uma) hora cada.\nc) Acompanhamento mensal de desempenho.\n4.2. Conteúdo e Materiais inclusos:\na) Acesso ao aplicativo Duolingo.\nb) 1 e-book com perguntas e respostas comuns em entrevistas.\nc) 1 deck com palavras essenciais do inglês.\nd) 1 cronograma de estudos anual.\n4.3. Suporte e Networking: Simulação de entrevistas, análise de desempenho e acesso a grupos de networking.' },
-                    { title: 'CLÁUSULA 5 - POLÍTICA DE PAGAMENTO E REEMBOLSO', text: '5.1. O pagamento deve ser realizado no ato da contratação.\n5.2. O/A CONTRATANTE tem o direito de solicitar o cancelamento e o reembolso integral do valor pago em até 7 (sete) dias corridos após a confirmação do pagamento, conforme Código de Defesa do Consumidor.\n5.3. Após o período de 7 dias, o valor pago não será reembolsado. A falta de acesso às aulas ou desistência após este prazo não gera direito a reembolso, visto que o serviço estará disponível.' },
-                    { title: 'CLÁUSULA 6 - CONFIDENCIALIDADE E USO DE INFORMAÇÕES', text: '6.1. Todas as informações pessoais e profissionais compartilhadas serão tratadas com sigilo.\n6.2. O/A CONTRATANTE concorda que informações não confidenciais (depoimentos, dados gerais de progresso) e entrevistas gravadas com identidade protegida poderão ser utilizadas para fins educativos e de propaganda.\n6.3. Para garantir a privacidade, todas as informações utilizadas no acervo serão anonimizadas.' },
-                    { title: 'CLÁUSULA 7 - RESCISÃO DO CONTRATO', text: '7.1. O contrato será encerrado automaticamente ao final dos 12 (doze) meses, cessando o acesso ao conteúdo.\n7.2. A CONTRATADA poderá rescindir o contrato caso o/a CONTRATANTE não siga as condições estabelecidas, incluindo a divulgação indevida de materiais próprios do programa para terceiros.' },
-                    { title: 'CLÁUSULA 8 - DISPOSIÇÕES FINAIS', text: '8.1. Ao assinar este contrato, o/a CONTRATANTE declara que leu e concorda com os termos apresentados.\n8.2. Este contrato entra em vigor a partir da data de sua assinatura.' }
-                ];
-
+                addText(`CONTRATANTE: ${fullName}`, { style: 'bold', align: 'left' });
+                addText(`CPF: ${cpf}`, { style: 'bold', align: 'left' });
+                addText(`DATA DE NASCIMENTO: ${birthdate}`, { style: 'bold', align: 'left' });
+                // ENDEREÇO REMOVIDO AQUI
+                addText(`PLANO: ${plan}`, { style: 'bold', align: 'left', spaceAfter: 10 });
+                
+                // 3. CLÁUSULAS (Agora Justificado)
                 contractClauses.forEach(clause => {
-                    addText(clause.title, { style: 'bold', size: 11, spaceAfter: 3 });
-                    addText(clause.text, { size: 10, spaceAfter: 8 });
+                    // Títulos das cláusulas alinhados à esquerda (padrão)
+                    addText(clause.title, { style: 'bold', size: 11, spaceAfter: 3, align: 'left' });
+                    // Corpo das cláusulas JUSTIFICADO
+                    addText(clause.text, { size: 10, spaceAfter: 8, align: 'justify' });
                 });
 
-                addText(`Salvador/BA, ${currentDate}.`, { spaceAfter: 20 });
+                // 4. ASSINATURAS (Alinhamento esquerdo)
+                addText(`Salvador/BA, ${currentDate}.`, { spaceAfter: 20, align: 'left' });
                 
                 const signatureWidthMm = 60;
                 const signatureHeightMm = 30;
@@ -283,18 +316,18 @@
                 pdf.addImage(signatureImage, 'PNG', margin, y, signatureWidthMm, signatureHeightMm);
                 y += signatureHeightMm + 2;
 
-                addText('_________________________', { size: 10, spaceAfter: 2 });
-                addText(fullName, { size: 10 });
-                addText('(CONTRATANTE)', { size: 8 });
+                addText('_________________________', { size: 10, spaceAfter: 2, align: 'left' });
+                addText(fullName, { size: 10, align: 'left' });
+                addText('(CONTRATANTE)', { size: 8, align: 'left' });
                 
                 y += 15;
-                 if (y + 20 > pageHeight - margin) {
+                if (y + 20 > pageHeight - margin) {
                     pdf.addPage();
                     y = margin;
                 }
-                addText('_________________________', { size: 10, spaceAfter: 2 });
-                addText('GERLON DE JESUS MAGALHAES SANTOS', { size: 10 });
-                addText('(MY PERSONAL TEACHER - CONTRATADA)', { size: 8 });
+                addText('_________________________', { size: 10, spaceAfter: 2, align: 'left' });
+                addText('GERLON DE JESUS MAGALHAES SANTOS', { size: 10, align: 'left' });
+                addText('(MY PERSONAL TEACHER - CONTRATADA)', { size: 8, align: 'left' });
 
                 pdf.save(`Contrato-Mentoria-${fullName}.pdf`);
                 incrementContractNumber();
