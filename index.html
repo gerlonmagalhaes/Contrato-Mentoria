@@ -131,7 +131,6 @@
         ];
 
         function getContractNumber() {
-            // Usa uma chave diferente para a mentoria
             let contractNumber = localStorage.getItem('contractMentoriaCounter'); 
             if (!contractNumber || isNaN(parseInt(contractNumber))) {
                 contractNumber = 1; 
@@ -254,7 +253,6 @@
 
                 // --- FUNÇÃO PARA ADICIONAR TEXTO (AJUSTADA PARA ALINHAMENTO ESQUERDA) ---
                 const addText = (text, options = {}) => {
-                    // ALINHAMENTO PADRÃO: 'left'
                     const { size = 10, style = 'normal', align = 'left', spaceAfter = 5 } = options;
                     
                     pdf.setFontSize(size);
@@ -262,7 +260,6 @@
 
                     const maxLineWidth = pageWidth - (margin * 2);
                     
-                    // Se for 'center', usa 'center', senão usa 'null' (que é left/start no jsPDF)
                     const finalAlign = align === 'center' ? align : null; 
                     
                     let xPos = margin;
@@ -278,7 +275,6 @@
                         y = margin;
                     }
 
-                    // Para left-alignment, xPos é a margem. FinalAlign é null.
                     pdf.text(splitText, xPos, y, { align: finalAlign });
                     y += textHeight + spaceAfter;
                 };
@@ -298,13 +294,11 @@
                 
                 // 3. CLÁUSULAS (Alinhamento Esquerda)
                 contractClauses.forEach(clause => {
-                    // Títulos das cláusulas alinhados à esquerda 
                     addText(clause.title, { style: 'bold', size: 11, spaceAfter: 3, align: 'left' });
-                    // Corpo das cláusulas ALINHADO À ESQUERDA
                     addText(clause.text, { size: 10, spaceAfter: 8, align: 'left' });
                 });
 
-                // 4. ASSINATURAS (Alinhamento esquerdo)
+                // 4. ASSINATURA DO CONTRATANTE (Alinhamento esquerdo)
                 addText(`Salvador/BA, ${currentDate}.`, { spaceAfter: 20, align: 'left' });
                 
                 const signatureWidthMm = 60;
@@ -320,12 +314,20 @@
                 addText(fullName, { size: 10, align: 'left' });
                 addText('(CONTRATANTE)', { size: 8, align: 'left' });
                 
+                // --- INFORMAÇÕES DA CONTRATADA NO FINAL (SEM ASSINATURA) ---
                 y += 15;
                 if (y + 20 > pageHeight - margin) {
                     pdf.addPage();
                     y = margin;
                 }
-            
+                
+                addText('GERLON DE JESUS MAGALHAES SANTOS (MY PERSONAL TEACHER)', { style: 'bold', size: 10, align: 'left' });
+                addText('Representante Legal da CONTRATADA', { size: 8, align: 'left' });
+                
+                // --- COMANDOS CRUCIAIS PARA DOWNLOAD ---
+                pdf.save(`Contrato-Mentoria-${fullName}.pdf`);
+                incrementContractNumber();
+                // --- FIM DOS COMANDOS CRUCIAIS ---
 
                 statusMessage.innerHTML = `
                     <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-lg" role="alert">
