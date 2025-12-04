@@ -110,13 +110,16 @@
         // --- DEFINIÇÃO ÚNICA DAS CLÁUSULAS (Para Modal e PDF) ---
         const contractClauses = [
             { title: 'CLÁUSULA 1 - OBJETO', text: '1.1. O presente contrato tem como objeto a prestação de serviços de mentoria online, voltada à preparação do CONTRATANTE para entrevistas de emprego em inglês para vagas internacionais.\n1.2. A mentoria inclui encontros síncronos, aulas gravadas, acompanhamento com plano de estudo personalizado e estratégias de aplicação para vagas internacionais.' },
-            { title: 'CLÁUSULA 2 - DURAÇÃO DO PROGRAMA', text: '2.1. O programa de mentoria tem duração de 12 (doze) meses. A vigência inicia-se na data de assinatura deste contrato e encerra-se automaticamente após o decurso do prazo estipulado.' },
+            { title: 'CLÁUSULA 2 - DURAÇÃO DO PROGRAMA', text: '2.1. O programa de mentoria tem duração de 12 (doze) meses. A vigência inicia-se na data definida pela CONTRATADA e encerra-se automaticamente após o decurso do prazo estipulado.' },
             { title: 'CLÁUSULA 3 - RESPONSABILIDADES DO/A CONTRATANTE', text: '3.1. O sucesso do programa depende diretamente do comprometimento do/a CONTRATANTE. Para alcançar os objetivos, este deverá:\na) Participar dos encontros ao vivo agendados.\nb) Assistir às aulas gravadas disponibilizadas.\nc) Seguir o plano de estudos personalizado elaborado pelo programa.\nd) Aplicar e gravar as entrevistas para serem analisadas.\n3.2. A ausência de comprometimento nas ações acima citadas pode comprometer os resultados esperados, não sendo responsabilidade da CONTRATADA.' },
-            { title: 'CLÁUSULA 4 - RESPONSABILIDADES DA CONTRATADA', text: '4.1. A CONTRATADA se compromete a fornecer os seguintes serviços durante a vigência de 12 meses:\na) Acesso a 10 (dez) módulos com mais de 50 (cinquenta) aulas preparatórias em formato de vídeo.\nb) Realização de 24 (vinte e quatro) encontros individuais de 30 (trinta) minutos cada, OU, a critério do CONTRATANTE e em comum acordo, 12 (doze) encontros individuais de 1 (uma) hora cada.\nc) Acompanhamento mensal de desempenho.\n4.2. Conteúdo e Materiais inclusos:\na) 1 e-book com perguntas e respostas comuns em entrevistas.\nc) 1 deck com palavras essenciais do inglês.\nd) 1 cronograma de estudos anual.\n4.3. Suporte e Networking: Simulação de entrevistas, análise de desempenho e acesso a grupos de networking.' },
+            { title: 'CLÁUSULA 4 - RESPONSABILIDADES DA CONTRATADA', text: '4.1. A CONTRATADA se compromete a fornecer os seguintes serviços durante a vigência de 12 meses:\na) Acesso a 10 (dez) módulos com mais de 50 (cinquenta) aulas preparatórias em formato de vídeo.\nb) Realização de 24 (vinte e quatro) encontros individuais de 30 (trinta) minutos cada, OU, a critério do CONTRATANTE e em comum acordo, 12 (doze) encontros individuais de 1 (uma) hora cada.\nc) Acompanhamento mensal de desempenho.\n4.2. Conteúdo e Materiais inclusos:\na) Acesso ao aplicativo Duolingo.\nb) 1 e-book com perguntas e respostas comuns em entrevistas.\nc) 1 deck com palavras essenciais do inglês.\nd) 1 cronograma de estudos anual.\n4.3. Suporte e Networking: Simulação de entrevistas, análise de desempenho e acesso a grupos de networking.' },
             { title: 'CLÁUSULA 5 - POLÍTICA DE PAGAMENTO E REEMBOLSO', text: '5.1. O pagamento deve ser realizado no ato da contratação.\n5.2. O/A CONTRATANTE tem o direito de solicitar o cancelamento e o reembolso integral do valor pago em até 7 (sete) dias corridos após a confirmação do pagamento, conforme Código de Defesa do Consumidor.\n5.3. Após o período de 7 dias, o valor pago não será reembolsado. A falta de acesso às aulas ou desistência após este prazo não gera direito a reembolso, visto que o serviço estará disponível.' },
             { title: 'CLÁUSULA 6 - CONFIDENCIALIDADE E USO DE INFORMAÇÕES', text: '6.1. Todas as informações pessoais e profissionais compartilhadas serão tratadas com sigilo.\n6.2. O/A CONTRATANTE concorda que informações não confidenciais (depoimentos, dados gerais de progresso) e entrevistas gravadas com identidade protegida poderão ser utilizadas para fins educativos e de propaganda.\n6.3. Para garantir a privacidade, todas as informações utilizadas no acervo serão anonimizadas.' },
             { title: 'CLÁUSULA 7 - RESCISÃO DO CONTRATO', text: '7.1. O contrato será encerrado automaticamente ao final dos 12 (doze) meses, cessando o acesso ao conteúdo.\n7.2. A CONTRATADA poderá rescindir o contrato caso o/a CONTRATANTE não siga as condições estabelecidas, incluindo a divulgação indevida de materiais próprios do programa para terceiros.' },
-            { title: 'CLÁUSULA 8 - DISPOSIÇÕES FINAIS', text: '8.1. Ao assinar este contrato, o/a CONTRATANTE declara que leu e concorda com os termos apresentados.\n8.2. A vigência deste Contrato e o início da prestação dos serviços dar-se-ão com a confirmação do pagamento integral e a disponibilização do acesso ao ambiente da mentoria. A contagem do prazo de 12 (doze) meses terá como marco inicial a data de início formalmente registrada pela CONTRATADA no cronograma de estudos compartilhado com o CONTRATANTE.' }
+            { 
+                title: 'CLÁUSULA 8 - DISPOSIÇÕES FINAIS', 
+                text: '8.1. Ao assinar este contrato, o/a CONTRATANTE declara que leu e concorda com os termos apresentados.\n8.2. A vigência deste Contrato e o início da prestação dos serviços dar-se-ão com a confirmação do pagamento e a disponibilização do acesso ao ambiente da mentoria. A contagem do prazo de 12 (doze) meses terá como marco inicial a data de início formalmente registrada pela CONTRATADA no cronograma de estudos compartilhado com o CONTRATANTE.\n8.3. Este contrato entra em vigor a partir da data de sua assinatura.' 
+            }
         ];
 
         function getContractNumber() {
@@ -154,14 +157,11 @@
             let htmlContent = '';
             contractClauses.forEach(clause => {
                 htmlContent += `<h4 class="font-bold text-base mt-4 mb-1">${clause.title}</h4>`;
-                // Usando <p> com white-space: pre-wrap para quebrar linha
                 htmlContent += `<p class="text-sm text-gray-700">${clause.text}</p>`;
             });
-
             return htmlContent;
         }
         
-        // --- FUNÇÃO CORRIGIDA PARA O MODAL (AGORA MOSTRA O CONTEÚDO COMPLETO) ---
         function getContractTextForModal() {
             return getContractHtml(); 
         }
@@ -226,8 +226,6 @@
                 const fullName = document.getElementById('fullName').value;
                 const cpf = document.getElementById('cpf').value;
                 const plan = document.getElementById('plan').value;
-                // Endereço não é mais necessário, mas o campo hidden pode ser lido se precisar para debug
-                // const address = document.getElementById('address').value; 
                 const birthdateRaw = document.getElementById('birthdate').value;
                 const birthdate = birthdateRaw.split('-').reverse().join('/');
 
@@ -247,7 +245,7 @@
                 const margin = 20;
                 let y = margin;
 
-                // --- FUNÇÃO PARA ADICIONAR TEXTO (JUSTIFICADO PADRÃO) ---
+                // --- FUNÇÃO CORRIGIDA PARA ADICIONAR TEXTO (JUSTIFICADO PADRÃO) ---
                 const addText = (text, options = {}) => {
                     const { size = 10, style = 'normal', align = 'justify', spaceAfter = 5 } = options;
                     
@@ -256,28 +254,24 @@
 
                     const maxLineWidth = pageWidth - (margin * 2);
                     
-                    // Alinhamento para o jsPDF
                     const finalAlign = align === 'left' ? null : align;
                     
-                    // Posição X
                     let xPos = margin;
                     if (align === 'center') {
-                        // Calcula a posição central (para o título principal)
+                        // Calcula a posição central
                         xPos = pageWidth / 2;
-                    }
-
-                    // Divide o texto para caber na largura da página
-                    const splitText = pdf.splitTextToSize(text, maxLineWidth);
+                    } 
+                    // Se for justify ou left, xPos permanece 'margin'
                     
-                    // Calcula a altura do texto
-                    const textHeight = splitText.length * (size * 0.35); // Aproximação da altura por linha
+                    const splitText = pdf.splitTextToSize(text, maxLineWidth);
+                    const textHeight = splitText.length * (size * 0.35);
 
                     if (y + textHeight > pageHeight - margin) {
                         pdf.addPage();
                         y = margin;
                     }
 
-                    // Adiciona o texto ao PDF
+                    // *** CORREÇÃO APLICADA AQUI: Garante que texto justificado/esquerda comece na margem ***
                     pdf.text(splitText, xPos, y, { align: finalAlign });
                     y += textHeight + spaceAfter;
                 };
@@ -293,7 +287,7 @@
                 addText(`CONTRATANTE: ${fullName}`, { style: 'bold', align: 'left' });
                 addText(`CPF: ${cpf}`, { style: 'bold', align: 'left' });
                 addText(`DATA DE NASCIMENTO: ${birthdate}`, { style: 'bold', align: 'left' });
-                // ENDEREÇO REMOVIDO AQUI
+                // ENDEREÇO REMOVIDO
                 addText(`PLANO: ${plan}`, { style: 'bold', align: 'left', spaceAfter: 10 });
                 
                 // 3. CLÁUSULAS (Agora Justificado)
